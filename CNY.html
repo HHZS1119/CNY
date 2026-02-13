@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 马年大吉 | Howard Hee</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #ffcf67; }
+        body {
+            background: radial-gradient(circle at center, #a50000 0%, #4a0000 100%);
+            font-family: 'Noto Serif SC', serif;
+            color: var(--gold);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .chinese-font { font-family: 'Ma Shan Zheng', cursive; }
+        .glass-card {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--gold);
+            border-radius: 24px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.6);
+        }
+        /* 名字居中下方样式 */
+        .footer-name {
+            position: absolute;
+            bottom: 40px;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="p-6">
+
+    <div class="text-center mb-10 z-10">
+        <h1 id="main-title" class="chinese-font text-8xl md:text-9xl mb-4 text-white drop-shadow-lg">马年大吉</h1>
+        <p id="lunar-info" class="text-xl tracking-[0.4em] opacity-80">2026 丙午年 · 正月初一</p>
+    </div>
+
+    <div class="glass-card p-10 md:p-16 flex flex-wrap justify-center gap-8 md:gap-14 z-10 mb-10">
+        <div class="text-center">
+            <span id="days" class="text-6xl md:text-8xl font-black block">00</span>
+            <p class="text-[10px] mt-2 tracking-widest opacity-60">DAYS / 天</p>
+        </div>
+        <div class="text-center">
+            <span id="hours" class="text-6xl md:text-8xl font-black block">00</span>
+            <p class="text-[10px] mt-2 tracking-widest opacity-60">HOURS / 时</p>
+        </div>
+        <div class="text-center">
+            <span id="minutes" class="text-6xl md:text-8xl font-black block">00</span>
+            <p class="text-[10px] mt-2 tracking-widest opacity-60">MINS / 分</p>
+        </div>
+        <div class="text-center">
+            <span id="seconds" class="text-6xl md:text-8xl font-black block text-yellow-500">00</span>
+            <p class="text-[10px] mt-2 tracking-widest opacity-60">SECS / 秒</p>
+        </div>
+    </div>
+
+    <div class="z-10 text-center">
+        <div id="song-name" class="text-xs mb-4 opacity-70 tracking-widest">点击开始播放文件夹贺岁歌曲</div>
+        <div class="flex gap-4 justify-center">
+            <button onclick="prevSong()" class="border border-[var(--gold)] px-4 py-2 rounded-full text-xs">PREV</button>
+            <button onclick="toggleMusic()" id="play-btn" class="bg-[var(--gold)] text-red-900 px-10 py-3 rounded-full font-black text-lg shadow-xl">PLAY 播放音乐</button>
+            <button onclick="nextSong()" class="border border-[var(--gold)] px-4 py-2 rounded-full text-xs">NEXT</button>
+        </div>
+        <audio id="audio-player"></audio>
+    </div>
+
+    <footer class="footer-name z-20">
+        <div class="w-16 h-[1px] bg-[var(--gold)] mx-auto mb-3 opacity-40"></div>
+        <p class="text-[11px] tracking-[0.5em] opacity-50 mb-1">DESIGNED BY</p>
+        <p class="text-3xl font-black tracking-[0.2em] text-white">HOWARD HEE</p>
+    </footer>
+
+    <script>
+        // 设置 2026年2月17日
+        const targetDate = new Date("Feb 17, 2026 00:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+            if (diff <= 0) { document.getElementById("main-title").innerText = "新年快乐"; return; }
+            document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+        }
+        setInterval(updateCountdown, 1000);
+
+        // 音乐文件夹逻辑
+        // 请确保你的音乐文件放在 index.html 同一个目录下，并命名如下：
+        const playlist = ["你好我好新年好2026新年歌Danny許佳麟Jasmine张静汶MikiTew咏瑄D00nutsJiaHuiiChris官杰皓官方MV.mp3", "2026马年新年歌1119 - 福气马上来OFFICIAL MV 上册.mp3", "2026新年歌 Nick钟盛忠 Stella钟晓玉 Benny Angel娃娃新年好马(feat. Jayden Jayvin QiVa WeiChen) Official 4K MV.mp3", "開開心心最重要 Happy Happy Important官方4K MVDanny 常勇 舒森 常樂 培永.mp3"]; 
+        let currentTrack = 0;
+        const player = document.getElementById("audio-player");
+        const playBtn = document.getElementById("play-btn");
+
+        function loadSong(index) {
+            player.src = playlist[index];
+            document.getElementById("song-name").innerText = "正在播放: " + playlist[index];
+        }
+
+        function toggleMusic() {
+            if (player.paused) {
+                if (!player.src) loadSong(currentTrack);
+                player.play();
+                playBtn.innerText = "PAUSE 暂停";
+            } else {
+                player.pause();
+                playBtn.innerText = "PLAY 播放";
+            }
+        }
+
+        function nextSong() {
+            currentTrack = (currentTrack + 1) % playlist.length;
+            loadSong(currentTrack);
+            player.play();
+            playBtn.innerText = "PAUSE 暂停";
+        }
+
+        function prevSong() {
+            currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+            loadSong(currentTrack);
+            player.play();
+            playBtn.innerText = "PAUSE 暂停";
+        }
+
+        // 自动切歌
+        player.onended = nextSong;
+
+    </script>
+</body>
+</html>
