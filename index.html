@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 马年大吉 | Howard Hee</title>
+    <title>2026 丙午马年 | Howard Hee</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;900&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #ffcf67; }
+        :root { --gold: #ffcf67; --red-cny: #d32f2f; }
         body {
-            background: radial-gradient(circle at center, #a50000 0%, #4a0000 100%);
+            background: #800000;
+            background-image: radial-gradient(circle, #b91c1c 0%, #450a0a 100%);
             font-family: 'Noto Serif SC', serif;
             color: var(--gold);
             min-height: 100vh;
@@ -18,120 +19,160 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            margin: 0;
         }
+
+        /* 自动烟花背景 */
+        #cny-canvas { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
+
+        /* 动态摇摆灯笼 */
+        .lantern-hook { position: fixed; top: -10px; z-index: 10; animation: swing 3.5s infinite ease-in-out; transform-origin: top center; }
+        .l-left { left: 8%; } .l-right { right: 8%; }
+        .lantern-body {
+            width: 80px; height: 70px; background: #ff3333; border: 2px solid var(--gold);
+            border-radius: 50% / 45%; box-shadow: 0 0 40px rgba(255, 51, 51, 0.5);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .lantern-body::after { content: "福"; font-family: 'Ma Shan Zheng'; color: var(--gold); font-size: 28px; }
+        .tassel-line { width: 3px; height: 45px; background: var(--gold); margin: 0 auto; box-shadow: 0 0 10px var(--gold); }
+
+        @keyframes swing { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
+
         .chinese-font { font-family: 'Ma Shan Zheng', cursive; }
-        .glass-card {
-            background: rgba(0, 0, 0, 0.4);
+        
+        .main-panel {
+            background: rgba(0, 0, 0, 0.45);
             backdrop-filter: blur(15px);
-            border: 2px solid var(--gold);
-            border-radius: 24px;
-            box-shadow: 0 0 50px rgba(0,0,0,0.6);
+            border: 4px double var(--gold);
+            border-radius: 50px;
+            box-shadow: 0 0 80px rgba(0,0,0,0.7);
+            padding: 3.5rem;
+            z-index: 5;
         }
-        /* 名字居中下方样式 */
-        .footer-name {
-            position: absolute;
-            bottom: 40px;
-            text-align: center;
-            width: 100%;
+
+        /* Howard Hee 专属署名 - 已调紧间距 */
+        .footer-brand {
+            position: absolute; bottom: 35px; width: 100%; text-align: center; z-index: 20;
         }
+        .name-style {
+            font-weight: 900; 
+            letter-spacing: 0.15em; /* 这里调紧了间距 */
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #ffd700, #fff, #ffd700);
+            background-size: 200% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: goldFlow 4s linear infinite;
+        }
+        @keyframes goldFlow { to { background-position: 200% center; } }
     </style>
 </head>
-<body class="p-6">
+<body>
+
+    <canvas id="cny-canvas"></canvas>
+
+    <div class="lantern-hook l-left"><div class="lantern-body"></div><div class="tassel-line"></div></div>
+    <div class="lantern-hook l-right"><div class="lantern-body"></div><div class="tassel-line"></div></div>
 
     <div class="text-center mb-10 z-10">
-        <h1 id="main-title" class="chinese-font text-8xl md:text-9xl mb-4 text-white drop-shadow-lg">马年大吉</h1>
-        <p id="lunar-info" class="text-xl tracking-[0.4em] opacity-80">2026 丙午年 · 正月初一</p>
+        <h1 class="chinese-font text-8xl md:text-9xl mb-6 text-white drop-shadow-[0_10px_10px_rgba(0,0,0,1)]">马年大吉</h1>
+        <p class="text-2xl tracking-[1em] opacity-90 font-bold border-y border-[var(--gold)] py-2 inline-block">2026 · 丙午马年</p>
     </div>
 
-    <div class="glass-card p-10 md:p-16 flex flex-wrap justify-center gap-8 md:gap-14 z-10 mb-10">
-        <div class="text-center">
-            <span id="days" class="text-6xl md:text-8xl font-black block">00</span>
-            <p class="text-[10px] mt-2 tracking-widest opacity-60">DAYS / 天</p>
-        </div>
-        <div class="text-center">
-            <span id="hours" class="text-6xl md:text-8xl font-black block">00</span>
-            <p class="text-[10px] mt-2 tracking-widest opacity-60">HOURS / 时</p>
-        </div>
-        <div class="text-center">
-            <span id="minutes" class="text-6xl md:text-8xl font-black block">00</span>
-            <p class="text-[10px] mt-2 tracking-widest opacity-60">MINS / 分</p>
-        </div>
-        <div class="text-center">
-            <span id="seconds" class="text-6xl md:text-8xl font-black block text-yellow-500">00</span>
-            <p class="text-[10px] mt-2 tracking-widest opacity-60">SECS / 秒</p>
-        </div>
+    <div class="main-panel flex flex-wrap justify-center gap-10 md:gap-20 mb-12">
+        <div class="text-center"><span id="days" class="text-7xl md:text-9xl font-black block">00</span><p class="text-xs mt-3 tracking-widest">DAYS / 天</p></div>
+        <div class="text-center"><span id="hours" class="text-7xl md:text-9xl font-black block">00</span><p class="text-xs mt-3 tracking-widest">HOURS / 时</p></div>
+        <div class="text-center"><span id="minutes" class="text-7xl md:text-9xl font-black block">00</span><p class="text-xs mt-3 tracking-widest">MINS / 分</p></div>
+        <div class="text-center"><span id="seconds" class="text-7xl md:text-9xl font-black block text-yellow-400">00</span><p class="text-xs mt-3 tracking-widest">SECS / 秒</p></div>
     </div>
 
-    <div class="z-10 text-center">
-        <div id="song-name" class="text-xs mb-4 opacity-70 tracking-widest">点击开始播放文件夹贺岁歌曲</div>
-        <div class="flex gap-4 justify-center">
-            <button onclick="prevSong()" class="border border-[var(--gold)] px-4 py-2 rounded-full text-xs">PREV</button>
-            <button onclick="toggleMusic()" id="play-btn" class="bg-[var(--gold)] text-red-900 px-10 py-3 rounded-full font-black text-lg shadow-xl">PLAY 播放音乐</button>
-            <button onclick="nextSong()" class="border border-[var(--gold)] px-4 py-2 rounded-full text-xs">NEXT</button>
+    <div class="z-20 text-center">
+        <div id="song-name" class="text-sm mb-6 opacity-80 font-bold tracking-widest">🧨 恭贺新禧 · 现正准备播放 🧨</div>
+        <div class="flex gap-8 justify-center items-center">
+            <button onclick="prevSong()" class="text-4xl hover:scale-125 transition-transform">⏮</button>
+            <button onclick="toggleMusic()" id="play-btn" class="bg-[var(--gold)] text-red-950 px-16 py-4 rounded-full font-black text-2xl shadow-[0_0_30px_rgba(255,207,103,0.6)] hover:brightness-110 active:scale-90 transition-all">
+                PLAY / 播放
+            </button>
+            <button onclick="nextSong()" class="text-4xl hover:scale-125 transition-transform">⏭</button>
         </div>
         <audio id="audio-player"></audio>
     </div>
 
-    <footer class="footer-name z-20">
-        <div class="w-16 h-[1px] bg-[var(--gold)] mx-auto mb-3 opacity-40"></div>
-        <p class="text-[11px] tracking-[0.5em] opacity-50 mb-1">DESIGNED BY</p>
-        <p class="text-3xl font-black tracking-[0.2em] text-white">HOWARD HEE</p>
+    <footer class="footer-brand">
+        <p class="text-[10px] tracking-[0.4em] opacity-40 mb-1 uppercase">Visual Concept by</p>
+        <p class="name-style">HOWARD HEE</p>
     </footer>
 
     <script>
-        // 设置 2026年2月17日
-        const targetDate = new Date("Feb 17, 2026 00:00:00").getTime();
+        const canvas = document.getElementById('cny-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = resize; resize();
 
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const diff = targetDate - now;
-            if (diff <= 0) { document.getElementById("main-title").innerText = "新年快乐"; return; }
-            document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
-            document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
-            document.getElementById("minutes").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-            document.getElementById("seconds").innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
-        }
-        setInterval(updateCountdown, 1000);
-
-        // 音乐文件夹逻辑
-        const playlist = ["你好我好新年好2026新年歌Danny許佳麟Jasmine张静汶MikiTew咏瑄D00nutsJiaHuiiChris官杰皓官方MV.mp3", "2026马年新年歌1119 - 福气马上来OFFICIAL MV 上册.mp3", "2026新年歌 Nick钟盛忠 Stella钟晓玉 Benny Angel娃娃新年好马(feat. Jayden Jayvin QiVa WeiChen) Official 4K MV.mp3", "開開心心最重要 Happy Happy Important官方4K MVDanny 常勇 舒森 常樂 培永.mp3"]; 
-        let currentTrack = 0;
-        const player = document.getElementById("audio-player");
-        const playBtn = document.getElementById("play-btn");
-
-        function loadSong(index) {
-            player.src = playlist[index];
-            document.getElementById("song-name").innerText = "正在播放: " + playlist[index];
-        }
-
-        function toggleMusic() {
-            if (player.paused) {
-                if (!player.src) loadSong(currentTrack);
-                player.play();
-                playBtn.innerText = "PAUSE 暂停";
-            } else {
-                player.pause();
-                playBtn.innerText = "PLAY 播放";
+        class Firework {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height;
+                this.targetY = Math.random() * (canvas.height / 2);
+                this.color = `hsl(${Math.random() * 60 + 10}, 100%, 60%)`;
+                this.exploded = false;
+            }
+            update() {
+                if(!this.exploded) {
+                    this.y -= 7;
+                    if(this.y <= this.targetY) {
+                        this.exploded = true;
+                        for(let i=0; i<45; i++) particles.push(new Particle(this.x, this.y, this.color));
+                    }
+                }
             }
         }
-
-        function nextSong() {
-            currentTrack = (currentTrack + 1) % playlist.length;
-            loadSong(currentTrack);
-            player.play();
-            playBtn.innerText = "PAUSE 暂停";
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x; this.y = y; this.color = color;
+                this.v = { x: (Math.random()-0.5)*12, y: (Math.random()-0.5)*12 };
+                this.a = 1;
+            }
+            update() { this.x += this.v.x; this.y += this.v.y; this.a -= 0.015; }
         }
 
-        function prevSong() {
-            currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
-            loadSong(currentTrack);
-            player.play();
-            playBtn.innerText = "PAUSE 暂停";
+        function animate() {
+            ctx.fillStyle = 'rgba(139, 29, 29, 0.2)';
+            ctx.fillRect(0,0,canvas.width, canvas.height);
+            if(Math.random() < 0.05) new Firework().update(); 
+            particles.forEach((p, i) => {
+                if(p.a > 0) {
+                    p.update();
+                    ctx.globalAlpha = p.a; ctx.fillStyle = p.color;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, 2.5, 0, Math.PI*2); ctx.fill();
+                } else { particles.splice(i, 1); }
+            });
+            requestAnimationFrame(animate);
         }
+        animate();
 
-        // 自动切歌
+        const target = new Date("Feb 17, 2026 00:00:00").getTime();
+        setInterval(() => {
+            const diff = target - new Date().getTime();
+            if(diff < 0) return;
+            document.getElementById("days").innerText = Math.floor(diff/86400000).toString().padStart(2, '0');
+            document.getElementById("hours").innerText = Math.floor((diff%86400000)/3600000).toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = Math.floor((diff%3600000)/60000).toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = Math.floor((diff%60000)/1000).toString().padStart(2, '0');
+        }, 1000);
+
+        const playlist = [
+            "你好我好新年好2026新年歌Danny許佳麟Jasmine张静汶MikiTew咏瑄D00nutsJiaHuiiChris官杰皓官方MV.mp3", 
+            "2026马年新年歌1119 - 福气马上来OFFICIAL MV 上册.mp3", 
+            "2026新年歌 Nick钟盛忠 Stella钟晓玉 Benny Angel娃娃新年好马(feat. Jayden Jayvin QiVa WeiChen) Official 4K MV.mp3", 
+            "開開心心最重要 Happy Happy Important官方4K MVDanny 常勇 舒森 常樂 培永.mp3"
+        ];
+        let current = 0; const player = document.getElementById("audio-player");
+        function load(idx) { player.src = playlist[idx]; document.getElementById("song-name").innerText = "🧨 正在播放：" + playlist[idx].substring(0, 15) + "... 🧨"; }
+        function toggleMusic() { if(!player.src) load(current); if(player.paused) { player.play(); document.getElementById("play-btn").innerText = "PAUSE 暂停"; } else { player.pause(); document.getElementById("play-btn").innerText = "PLAY 播放"; } }
+        function nextSong() { current = (current + 1) % playlist.length; load(current); player.play(); }
+        function prevSong() { current = (current - 1 + playlist.length) % playlist.length; load(current); player.play(); }
         player.onended = nextSong;
-
     </script>
 </body>
 </html>
