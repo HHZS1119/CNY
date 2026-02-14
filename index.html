@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;900&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #ffcf67; --red-cny: #d32f2f; }
+        :root { --gold: #ffcf67; }
         body {
             background: #800000;
             background-image: radial-gradient(circle, #b91c1c 0%, #450a0a 100%);
@@ -50,20 +50,21 @@
             z-index: 5;
         }
 
-        /* Howard Hee 专属署名 - 已调紧间距 */
+        /* Howard Hee 专属署名 - 调紧间距与流金特效 */
         .footer-brand {
             position: absolute; bottom: 35px; width: 100%; text-align: center; z-index: 20;
         }
         .name-style {
             font-weight: 900; 
-            letter-spacing: 0.15em; /* 这里调紧了间距 */
+            letter-spacing: 0.15em; 
             font-size: 2.5rem;
             background: linear-gradient(90deg, #ffd700, #fff, #ffd700);
             background-size: 200% auto;
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: goldFlow 4s linear infinite;
+            animation: goldFlow 4s linear infinite, pulse 3s infinite ease-in-out;
         }
         @keyframes goldFlow { to { background-position: 200% center; } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -86,11 +87,11 @@
     </div>
 
     <div class="z-20 text-center">
-        <div id="song-name" class="text-sm mb-6 opacity-80 font-bold tracking-widest">🧨 恭贺新禧 · 现正准备播放 🧨</div>
+        <div id="song-name" class="text-sm mb-6 opacity-80 font-bold tracking-widest">🧨 恭贺新禧 · 准备播放马年曲目 🧨</div>
         <div class="flex gap-8 justify-center items-center">
             <button onclick="prevSong()" class="text-4xl hover:scale-125 transition-transform">⏮</button>
             <button onclick="toggleMusic()" id="play-btn" class="bg-[var(--gold)] text-red-950 px-16 py-4 rounded-full font-black text-2xl shadow-[0_0_30px_rgba(255,207,103,0.6)] hover:brightness-110 active:scale-90 transition-all">
-                PLAY / 播放
+                PLAY / 播放音乐
             </button>
             <button onclick="nextSong()" class="text-4xl hover:scale-125 transition-transform">⏭</button>
         </div>
@@ -165,7 +166,7 @@
             "你好我好新年好2026新年歌Danny許佳麟Jasmine张静汶MikiTew咏瑄D00nutsJiaHuiiChris官杰皓官方MV.mp3", 
             "2026马年新年歌1119 - 福气马上来OFFICIAL MV 上册.mp3", 
             "2026新年歌 Nick钟盛忠 Stella钟晓玉 Benny Angel娃娃新年好马(feat. Jayden Jayvin QiVa WeiChen) Official 4K MV.mp3", 
-            "開開心心最重要 Happy Happy Important官方4K MVDanny 常勇 舒森 常樂 培永.mp3"
+            "開開心心最重要 Happy Happy Important官方4K MVDanny 常勇 舒森 常樂 培永.mp3","3P - 时光大耳窿 2026最振奋人心新年歌.mp3","Astro 2026 新年歌灯笼挂在火箭上Lantern to the Stars  4K高清版.mp3","2026人生最美是团圆.mp3"
         ];
         let current = 0; const player = document.getElementById("audio-player");
         function load(idx) { player.src = playlist[idx]; document.getElementById("song-name").innerText = "🧨 正在播放：" + playlist[idx].substring(0, 15) + "... 🧨"; }
