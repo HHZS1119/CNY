@@ -199,6 +199,7 @@
         }
         animate();
 
-        // --- 目标日期更新：2027年春节 (2月6日) ---
-        const target = new Date("Feb 6, 2027 00:00:00").getTime();
-        function update() 
+        // --- 核心修复：使用更稳健的日期解析逻辑 ---
+        const targetDate = new Date("2027-02-06T00:00:00").getTime();
+
+        function updateCou
