@@ -74,7 +74,6 @@
             width: 90%; max-width: 950px;
         }
 
-        /* --- 署名样式修改 --- */
         .footer-brand {
             position: fixed; bottom: 30px; width: 100%; text-align: center; z-index: 20;
         }
@@ -118,8 +117,8 @@
     </div>
 
     <div class="text-center mb-6 z-10 px-4">
-        <h1 class="title-fancy text-7xl md:text-9xl mb-4">马年大吉</h1>
-        <p class="text-xl md:text-3xl tracking-[0.6em] font-bold text-[var(--gold)]">2026 · 丙午马年</p>
+        <h1 class="title-fancy text-7xl md:text-9xl mb-4">羊年大吉</h1>
+        <p class="text-xl md:text-3xl tracking-[0.6em] font-bold text-[var(--gold)]">2027 · 丁未羊年</p>
     </div>
 
     <div class="main-panel flex flex-wrap justify-around items-center gap-4 mb-8">
@@ -130,7 +129,7 @@
     </div>
 
     <div class="z-20 text-center px-4 mb-24 max-w-4xl">
-        <div id="song-name" class="text-sm mb-6 font-bold text-white/90 leading-relaxed px-4">🧨 准备播放 🧨</div>
+        <div id="song-name" class="text-sm mb-6 font-bold text-white/90 leading-relaxed px-4">🧨 恭贺新禧 · 顺颂时祺 🧨</div>
         <div class="flex gap-8 justify-center items-center">
             <button onclick="prevSong()" class="text-4xl hover:scale-110 transition-transform">⏮</button>
             <button onclick="toggleMusic()" id="play-btn" class="bg-gradient-to-b from-[#ffcf67] to-[#d97706] text-red-950 px-10 py-3 rounded-lg font-black text-xl shadow-lg active:scale-95 transition-all">播放音乐</button>
@@ -140,7 +139,7 @@
     </div>
 
     <footer class="footer-brand">
-        <p class="footer-text">Created by Howard Hee | 马年新春专题网站</p>
+        <p class="footer-text">Created by Howard Hee | 羊年新春专题网站</p>
     </footer>
 
     <script>
@@ -200,41 +199,6 @@
         }
         animate();
 
+        // --- 目标日期更新：2027年春节 (2月6日) ---
         const target = new Date("Feb 6, 2027 00:00:00").getTime();
-        function update() {
-            const diff = target - Date.now();
-            if(diff <= 0) return;
-            document.getElementById("days").innerText = Math.floor(diff/86400000).toString().padStart(2, '0');
-            document.getElementById("hours").innerText = Math.floor((diff%86400000)/3600000).toString().padStart(2, '0');
-            document.getElementById("minutes").innerText = Math.floor((diff%3600000)/60000).toString().padStart(2, '0');
-            document.getElementById("seconds").innerText = Math.floor((diff%60000)/1000).toString().padStart(2, '0');
-        }
-        setInterval(update, 1000); update();
-
-        const playlist = [
-            "你好我好新年好2026新年歌Danny許佳麟Jasmine张静汶MikiTew咏瑄D00nutsJiaHuiiChris官杰皓官方MV.mp3", 
-            "2026马年新年歌1119 - 福气马上来OFFICIAL MV 上册.mp3", 
-            "2026新年歌 Nick钟盛忠 Stella钟晓玉 Benny Angel娃娃新年好马(feat. Jayden Jayvin QiVa WeiChen) Official 4K MV.mp3", 
-            "開開心心最重要 Happy Happy Important官方4K MVDanny 常勇 舒森 常樂 培永.mp3",
-            "3P - 时光大耳窿 2026最振奋人心新年歌.mp3",
-            "Astro 2026 新年歌灯笼挂在火箭上Lantern to the Stars 4K高清版.mp3",
-            "2026人生最美是团圆.mp3"
-        ];
-        let cur = 0; const player = document.getElementById("audio-player");
-        function load(i) { 
-            player.src = playlist[i]; 
-            let fullName = playlist[i].replace('.mp3', '');
-            document.getElementById("song-name").innerText = "🧨 正在播放：" + fullName + " 🧨"; 
-        }
-        function toggleMusic() {
-            if(!player.src) load(cur);
-            if(player.paused) { player.play(); document.getElementById("play-btn").innerText = "暂停音乐"; }
-            else { player.pause(); document.getElementById("play-btn").innerText = "播放音乐"; }
-        }
-        function nextSong() { cur = (cur + 1) % playlist.length; load(cur); player.play(); document.getElementById("play-btn").innerText = "暂停音乐"; }
-        function prevSong() { cur = (cur - 1 + playlist.length) % playlist.length; load(cur); player.play(); document.getElementById("play-btn").innerText = "暂停音乐"; }
-        player.onended = nextSong;
-    </script>
-</body>
-</html>
-
+        function update() 
